@@ -1,0 +1,19 @@
+/* styles/EditBanner.module.css */
+
+.imagePickerContainer {
+    margin-top: 16px;
+  }
+  
+  .imagePicker {
+    margin-top: 16px;
+  }
+  
+  .imageThumbnail {
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .imageThumbnail:hover {
+    transform: scale(1.05);
+  }
+  

@@ -1,95 +1,94 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+// app/page.tsx
+"use client"
 
-export default function Home() {
+// pages/index.tsx
+// pages/index.tsx
+import { useState } from 'react';
+import { Container, Typography } from '@mui/material';
+import BannerImageComp from './components/BannerImageComp';
+import EditBannerTemplateBs from './components/EditBannerTemplateBs';
+import styles from './styles/Home.module.css'; // Import CSS module
+
+const initialBanners = [
+  {
+    title: "Ad Banner 1",
+    description: "Discover the latest trends with our first ad banner.",
+    cta: "Learn More",
+    image: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/5/square.png",
+    background: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/5/square.png"
+  },
+  {
+    title: "Ad Banner 2",
+    description: "Check out our second banner with exclusive offers.",
+    cta: "Shop Now",
+    image: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/9/square.png",
+    background: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/9/square.png"
+  },
+  {
+    title: "Ad Banner 3",
+    description: "Amazing discounts on our third banner. Don’t miss out!",
+    cta: "Get Discount",
+    image: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/1/square.png",
+    background: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/1/square.png"
+  },
+  {
+    title: "Ad Banner 4",
+    description: "Explore our fourth banner with new arrivals.",
+    cta: "Browse Now",
+    image: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/15/square.png",
+    background: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/15/square.png"
+  },
+  {
+    title: "Ad Banner 5",
+    description: "Our fifth banner is here with the best deals of the season.",
+    cta: "See Offers",
+    image: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/5/square.png",
+    background: "https://bannerbot-public.s3.ap-south-1.amazonaws.com/templates/5/square.png"
+  }
+];
+
+const Home: React.FC = () => {
+  const [banners, setBanners] = useState(initialBanners);
+  const [selectedBanner, setSelectedBanner] = useState<any>(null);
+  const [editOpen, setEditOpen] = useState(false);
+
+  const handleEditClick = (banner: any) => {
+    setSelectedBanner(banner);
+    setEditOpen(true);
+  };
+
+  const handleSave = (updatedBanner: any) => {
+    setBanners(banners.map(b => b === selectedBanner ? updatedBanner : b));
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <Container>
+      <Typography variant="h4" gutterBottom className={styles.pageTitle}>
+        Home Page
+      </Typography>
+      <div className={styles.bannersContainer}>
+        {banners.map((banner, index) => (
+          <BannerImageComp
+            key={index}
+            title={banner.title}
+            description={banner.description}
+            cta={banner.cta}
+            image={banner.image}
+            background={banner.background}
+            onEdit={() => handleEditClick(banner)}
+          />
+        ))}
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      {selectedBanner && (
+        <EditBannerTemplateBs
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          onSave={handleSave}
+          banner={selectedBanner}
         />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      )}
+    </Container>
   );
-}
+};
+
+export default Home;
